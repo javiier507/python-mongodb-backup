@@ -1,15 +1,19 @@
 # Instructions
 
 ```sh
-sudo crontab -e
-sudo crontab -l
+cd /home/penalba/projects/Catalogue-Backup
+pip3 install
 ```
 
 ```sh
-0 0 * * 1 python /path/main.py
+crontab -e
+crontab -l
+```
+
+```sh
+0 0 * * 1 python3 /home/penalba/projects/Catalogue-Backup/main.py
 ```
 
 References
-```sh
-https://geekytheory.com/programar-tareas-en-linux-usando-crontab
-```
+
+[GeekyTheory](https://geekytheory.com/programar-tareas-en-linux-usando-crontab)
