@@ -7,6 +7,8 @@ from botocore.client import Config
 
 load_dotenv()
 
+backups_path = '/home/penalba/backups/'
+
 def backup() -> str:
     date = datetime.datetime.now()
     date_format = date.strftime("%Y-%m-%d_%H-%M")
@@ -22,7 +24,7 @@ def backup() -> str:
     connection = '--authenticationDatabase={} -d {} -u {} -p {}'.format(auth_db, database, username, password)
 
     os.system('docker exec database_1 mongodump {} --gzip --archive=/opt/{}'.format(connection, filename))
-    os.system('docker cp database_1:/opt/{} ./backups/'.format(filename))
+    os.system('docker cp database_1:/opt/{} {}'.format(filename, backups_path))
 
     return filename
 
@@ -43,6 +45,6 @@ def upload(path: str, filename: str):
 
 filename = backup()
 
-path = '/home/penalba/backups/{}'.format(filename)
+path = '{}{}'.format(backups_path, filename)
 
 upload(path, filename)
