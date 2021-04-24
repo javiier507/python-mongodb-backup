@@ -11,7 +11,11 @@ crontab -l
 ```
 
 ```sh
-0 0 * * 1 python3 /home/penalba/projects/Catalogue-Backup/main.py
+0 0 * * 0 python3 /home/penalba/projects/Catalogue-Backup/main.py
+```
+
+```sh
+ls -al ~/backups/
 ```
 
 References
