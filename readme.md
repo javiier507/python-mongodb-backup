@@ -15,7 +15,7 @@ crontab -l
 ```
 
 ```sh
-ls -al ~/backups/
+ls -al /home/penalba/backups
 ```
 
 References
