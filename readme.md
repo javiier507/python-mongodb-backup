@@ -1,21 +1,20 @@
 # Instructions
 
+## Installation
 ```sh
-cd /home/penalba/projects/Catalogue-Backup
-pip3 install
+python3 -m venv .venv
+source .venv/bin/activate
+pip3 install -r requirements.txt
 ```
 
+## Setup Cron
 ```sh
 crontab -e
 crontab -l
 ```
 
 ```sh
-0 0 * * 0 python3 /home/penalba/projects/Catalogue-Backup/main.py
-```
-
-```sh
-ls -al /home/penalba/backups
+0 0 * * 0 python3 <path>/main.py
 ```
 
 References

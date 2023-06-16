@@ -7,44 +7,27 @@ from botocore.client import Config
 
 load_dotenv()
 
-backups_path = '/home/penalba/backups/'
+# variables
+DATABASE = os.getenv('DATABASE')
+DB_USERNAME = os.getenv('DB_USERNAME')
+DB_PASSWORD = os.getenv('DB_PASSWORD')
+BACKUP_PATH = os.getenv('BACKUP_PATH')
+CONTAINER = os.getenv('CONTAINER')
 
 def backup() -> str:
     date = datetime.datetime.now()
     date_format = date.strftime("%Y-%m-%d_%H-%M")
 
-    filename = 'strapi-{}.zip'.format(date_format)
+    filename = 'backup-{}.zip'.format(date_format)
 
-    # credentials
-    auth_db = os.getenv('AUTH_DB')
-    database = os.getenv('DATABASE')
-    username = os.getenv('USERNAME')
-    password = os.getenv('PASSWORD')
+    connection = '--authenticationDatabase=admin -d {} -u {} -p {}'.format(DATABASE, DB_USERNAME, DB_PASSWORD)
 
-    connection = '--authenticationDatabase={} -d {} -u {} -p {}'.format(auth_db, database, username, password)
-
-    os.system('docker exec database_1 mongodump {} --gzip --archive=/opt/{}'.format(connection, filename))
-    os.system('docker cp database_1:/opt/{} {}'.format(filename, backups_path))
+    os.system('sudo docker exec {} mongodump {} --gzip --archive=/opt/{}'.format(CONTAINER, connection, filename))
+    os.system('sudo docker cp {}:/opt/{} {}'.format(CONTAINER, filename, BACKUP_PATH))
 
     return filename
-
-def upload(path: str, filename: str):
-    ACCESS_ID = os.getenv('ACCESS_ID')
-    SECRET_KEY = os.getenv('SECRET_KEY')
-
-    client = session.Session().client('s3',
-                            region_name='nyc3',
-                            endpoint_url='https://nyc3.digitaloceanspaces.com',
-                            aws_access_key_id=ACCESS_ID,
-                            aws_secret_access_key=SECRET_KEY)
-
-    client.upload_file(path, 'preciososdetallesspace', 'backups/{}'.format(filename))
-
 
 # run process
 
 filename = backup()
-
-path = '{}{}'.format(backups_path, filename)
-
-upload(path, filename)
+print('backup executed! file {} generated'.format(filename))
